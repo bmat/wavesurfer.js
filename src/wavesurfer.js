@@ -122,12 +122,12 @@ var WaveSurfer = {
         });
     },
 
-    restartAnimationLoop: function () {
+    restartAnimationLoop: function (start, end) {
         var my = this;
         var requestFrame = window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame;
         var frame = function () {
-            if (!my.backend.isPaused()) {
+            if (!my.backend.isPaused() && my.backend.getCurrentTime() <= end) {
                 my.drawer.progress(my.backend.getPlayedPercents());
                 requestFrame(frame);
             }
@@ -145,7 +145,7 @@ var WaveSurfer = {
 
     play: function (start, end) {
         this.backend.play(start, end);
-        this.restartAnimationLoop();
+        this.restartAnimationLoop(start, end);
         this.fireEvent('play');
     },
 
