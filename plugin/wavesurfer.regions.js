@@ -286,10 +286,10 @@ WaveSurfer.Region = {
             var startTime;
 
             var onDown = function (e) {
-                e.stopPropagation();
                 startTime = my.wavesurfer.drawer.handleEvent(e) * duration;
 
                 if (e.target.tagName.toLowerCase() == 'handle') {
+                    e.stopPropagation();
                     if (e.target.classList.contains('wavesurfer-handle-start')) {
                         resize = 'start';
                     } else {

@@ -47,7 +47,7 @@ WaveSurfer.Drawer = {
     setupWrapperEvents: function () {
         var my = this;
 
-        this.wrapper.addEventListener('click', function (e) {
+        this.wrapper.addEventListener('mousedown', function (e) {
             var scrollbarHeight = my.wrapper.offsetHeight - my.wrapper.clientHeight;
             if (scrollbarHeight != 0) {
                 // scrollbar is visible.  Check if click was on it
