@@ -65,6 +65,8 @@ var WaveSurfer = {
         // Will hold a list of event descriptors that need to be
         // cancelled on subsequent loads of audio
         this.tmpEvents = [];
+        // Used to avoid having several animation loops at the same time
+        this.frameCounter = 0;
 
         this.createDrawer();
         this.createBackend();
@@ -122,12 +124,13 @@ var WaveSurfer = {
         });
     },
 
-    restartAnimationLoop: function (start, end) {
+    restartAnimationLoop: function (start, end, frameNumber) {
         var my = this;
         var requestFrame = window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame;
         var frame = function () {
-            if (!my.backend.isPaused() && my.backend.getCurrentTime() <= end) {
+            if (frameNumber === my.frameCounter && !my.backend.isPaused() &&
+                my.backend.getCurrentTime() <= end) {
                 my.drawer.progress(my.backend.getPlayedPercents());
                 requestFrame(frame);
             }
@@ -144,8 +147,9 @@ var WaveSurfer = {
     },
 
     play: function (start, end) {
+        this.frameCounter += 1;
         this.backend.play(start, end);
-        this.restartAnimationLoop(start, end);
+        this.restartAnimationLoop(start, end, this.frameCounter);
         this.fireEvent('play');
     },
 
