@@ -49,7 +49,9 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
         }
 
         this.clearWave();
+
     },
+
 
     clearWave: function () {
         this.waveCc.clearRect(0, 0, this.width, this.height);
@@ -58,7 +60,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
         }
     },
 
-    drawWave: function (peaks, channelIndex) {
+    drawWave: function (peaks, channelIndex, max) {
         // Split channels
         if (peaks[0] instanceof Array) {
             var channels = peaks;
@@ -77,6 +79,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
         var height = this.params.height * this.params.pixelRatio;
         var offsetY = height * channelIndex || 0;
         var halfH = height / 2;
+        var coef = halfH / max;
         var length = peaks.length;
         var scale = 1;
         if (this.params.fillParent && this.width != length) {
@@ -95,7 +98,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
             cc.moveTo($, halfH + offsetY);
 
             for (var i = 0; i < length; i++) {
-                var h = Math.round(peaks[i] * halfH);
+                var h = Math.round(peaks[i] * coef);
                 cc.lineTo(i * scale + $, halfH + h + offsetY);
             }
 
@@ -103,7 +106,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.Canvas, {
             cc.moveTo($, halfH + offsetY);
 
             for (var i = 0; i < length; i++) {
-                var h = Math.round(peaks[i] * halfH);
+                var h = Math.round(peaks[i] * coef);
                 cc.lineTo(i * scale + $, halfH - h + offsetY);
             }
 

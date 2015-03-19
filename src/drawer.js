@@ -71,7 +71,12 @@ WaveSurfer.Drawer = {
     drawPeaks: function (peaks, length) {
         this.resetScroll();
         this.setWidth(length);
-        this.drawWave(peaks);
+        if (this.params.normalize) {
+            var max = WaveSurfer.util.max(peaks);
+        } else {
+            max = 1;
+        }
+        this.drawWave(peaks, 0, max);
     },
 
     style: function (el, styles) {
@@ -184,7 +189,7 @@ WaveSurfer.Drawer = {
 
     updateSize: function () {},
 
-    drawWave: function (peaks, max) {},
+    drawWave: function (peaks, channelIndex, max) {},
 
     clearWave: function () {},
 
