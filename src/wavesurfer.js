@@ -130,7 +130,7 @@ var WaveSurfer = {
             window.webkitRequestAnimationFrame;
         var frame = function () {
             if (frameNumber === my.frameCounter && !my.backend.isPaused() &&
-                my.backend.getCurrentTime() <= end) {
+                (!end || my.backend.getCurrentTime() <= end)) {
                 my.drawer.progress(my.backend.getPlayedPercents());
                 requestFrame(frame);
             }
