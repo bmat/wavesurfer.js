@@ -236,6 +236,26 @@ WaveSurfer.Region = {
         };
 
         this.wavesurfer.on('play', onPlay);
+        this.wavesurfer.on('seek', function (progress) {
+            var time = progress * my.wavesurfer.getDuration();
+
+            if (my.start <= time && my.end > time) {
+                my.firedIn = true;
+                my.firedOut = false;
+                my.fireEvent('in');
+                my.wavesurfer.fireEvent('region-in', my);
+            }
+        });
+        this.on('update', function () {
+            var time = my.wavesurfer.getCurrentTime();
+
+            if (my.start <= time && my.end > time) {
+                my.firedIn = true;
+                my.firedOut = false;
+                my.fireEvent('in');
+                my.wavesurfer.fireEvent('region-in', my);
+            }
+        });
         this.wavesurfer.backend.on('audioprocess', onProcess);
 
         this.on('remove', function () {

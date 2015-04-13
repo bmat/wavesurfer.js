@@ -4,19 +4,20 @@
 WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Drawer.Canvas, {
     init: function (wavesurfer, params) {
         this.wavesurfer = wavesurfer;
-        this.container = this.wavesurfer.drawer.container;
-        this.lastPos = this.wavesurfer.drawer.lastPos;
         this.params = wavesurfer.util.extend(
             {}, this.wavesurfer.drawer.params, {
                 showRegions: false,
                 showOverview: false,
                 overviewBorderColor: "green",
-                overviewBorderSize: 2
+                overviewBorderSize: 2,
+                container: this.wavesurfer.drawer.container
             }, params, {
                 scrollParent: false,
                 fillParent: true
             }
         );
+        this.container = this.params.container;
+        this.lastPos = this.wavesurfer.drawer.lastPos;
 
         this.width = 0;
         this.height = this.params.height * this.params.pixelRatio;
@@ -166,6 +167,11 @@ WaveSurfer.Minimap = WaveSurfer.util.extend({}, WaveSurfer.Drawer, WaveSurfer.Dr
     render: function () {
         var len = this.getWidth();
         var peaks = this.wavesurfer.backend.getPeaks(len);
+
+        this.progress(0);
+        //remove previous peaks before drawing the new ones
+        this.drawPeaks({ length: 0 }, 0);
+
         this.drawPeaks(peaks, len);
 
         if (this.params.showOverview) {
